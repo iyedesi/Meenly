@@ -12,6 +12,9 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+// Servir les fichiers statiques depuis /public
+app.use(express.static(path.join(__dirname, "public")));
+
 
 // Servir les fichiers de /public
 app.use(express.static(path.join(__dirname, "public")));
@@ -90,7 +93,14 @@ app.post("/api/guardrail", async (req, res) => {
   }
 });
 
+
 // ------------------ DÉMARRAGE ------------------
+
+// Route catch-all pour le front
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`✅ Serveur Meenly lancé sur : http://localhost:${PORT}`);
