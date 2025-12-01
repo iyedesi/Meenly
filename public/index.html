@@ -764,6 +764,68 @@
         max-width: 100%;
       }
     }
+  /* ----------- TARIFS / PRICING ----------- */
+
+#page-pricing .section-title {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+}
+
+#page-pricing .section-subtitle {
+    text-align: center;
+    opacity: 0.7;
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+}
+
+.pricing-container {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pricing-card {
+    background: var(--bg-secondary);
+    border-radius: 14px;
+    padding: 20px;
+    width: 260px;
+    transition: 0.25s;
+}
+
+.pricing-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+}
+
+.pricing-card h3 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.pricing-card .price {
+    margin: 8px 0 15px 0;
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.pricing-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pricing-card ul li {
+    font-size: 0.9rem;
+    opacity: 0.85;
+    margin-bottom: 8px;
+}
+
+.pricing-card.highlight {
+    border: 2px solid var(--accent);
+    background: var(--accent-light);
+}
   </style>
 </head>
 <body class="theme-meenly">
@@ -906,80 +968,101 @@
       </section>
 
       <!-- PAGE PRICING -->
-      <section id="page-pricing" class="page">
-        <div class="page-inner">
-          <h1 style="text-align:center;">Tarifs</h1>
-          <p class="page-subtitle" style="text-align:center;">
-            Commence gratuitement, puis choisis le rythme qui te convient si Meenly t’aide vraiment.
-          </p>
+          <div style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center; margin-top:30px;">
 
-          <div class="card" style="display:flex; gap:14px; flex-wrap:wrap;">
-            <div style="flex:1; min-width:180px;">
-              <h3>Gratuit</h3>
-              <p style="font-size:0.85rem; opacity:0.8; margin:6px 0 10px;">
-                Pour découvrir Meenly en douceur.
-              </p>
-              <ul style="font-size:0.8rem; opacity:0.9; list-style:none; padding-left:0;">
-                <li>• Accès au chat émotionnel</li>
-                <li>• Petites séances courtes</li>
-                <li>• Sans carte bancaire au début</li>
-              </ul>
-            </div>
+      <!-- Carte Gratuit -->
+      <div class="pricing-card">
+        <h3>Gratuit</h3>
+        <div class="price">0 DH</div>
+        <p style="font-size:0.85rem; opacity:0.8; margin:6px 0 10px;">
+          Pour découvrir Meenly en douceur.
+        </p>
+        <ul>
+          <li>Accès au chat émotionnel</li>
+          <li>Petites séances courtes</li>
+          <li>Sans carte bancaire au début</li>
+        </ul>
+      </div>
 
-            <div style="flex:1; min-width:180px;">
-              <h3>Abonnement mensuel</h3>
-              <p style="font-size:0.85rem; opacity:0.8; margin:6px 0 10px;">
-                Pour t’accompagner régulièrement.
-              </p>
-              <ul style="font-size:0.8rem; opacity:0.9; list-style:none; padding-left:0;">
-                <li>• Utilisation flexible chaque jour</li>
-                <li>• Outil d’humeur et suivi</li>
-                <li>• Priorité sur les nouveautés</li>
-              </ul>
-            </div>
+      <!-- Carte Mensuel -->
+      <div class="pricing-card pricing-card-highlight">
+        <h3>Abonnement mensuel</h3>
+        <div class="price">20 DH / mois</div>
+        <p style="font-size:0.85rem; opacity:0.8; margin:6px 0 10px;">
+          Pour t’accompagner régulièrement.
+        </p>
+        <ul>
+          <li>Utilisation flexible chaque jour</li>
+          <li>Outil d’humeur et suivi</li>
+          <li>Priorité sur les nouveautés</li>
+        </ul>
+      </div>
 
-            <div style="flex:1; min-width:180px;">
-              <h3>Abonnement annuel</h3>
-              <p style="font-size:0.85rem; opacity:0.8; margin:6px 0 10px;">
-                Pour ceux qui veulent un soutien sur la durée.
-              </p>
-              <ul style="font-size:0.8rem; opacity:0.9; list-style:none; padding-left:0;">
-                <li>• Meilleur rapport temps / prix</li>
-                <li>• Accès illimité dans l’année</li>
-                <li>• Idéal si Meenly t’aide vraiment</li>
-              </ul>
-            </div>
-          </div>
+      <!-- Carte Annuel -->
+      <div class="pricing-card">
+        <h3>Abonnement annuel</h3>
+        <div class="price">200 DH / an</div>
+        <p style="font-size:0.85rem; opacity:0.8; margin:6px 0 10px;">
+          Pour investir sur ton bien-être sur la durée.
+        </p>
+        <ul>
+          <li>Économie par rapport au mensuel</li>
+          <li>Accès illimité à Meenly</li>
+          <li>Priorité sur les futures fonctionnalités</li>
+        </ul>
+      </div>
 
-          <p class="hint">
-            Les prix exacts et moyens de paiement pourront évoluer. L’idée : un accès abordable
-            qui respecte ta situation.
-          </p>
-        </div>
-      </section>
+    </div>
+  </div>
+</section>
+
 
       <!-- PAGE SAFETY -->
-      <section id="page-safety" class="page">
-        <div class="page-inner">
-          <h1>Sécurité & limites</h1>
-          <p class="page-subtitle">
-            Meenly est pensé pour être un espace intime, mais ce n’est pas un médecin ni un psychologue.
-          </p>
+     <section id="page-pricing" class="page">
+    <div class="page-inner">
 
-          <div class="card">
-            <p style="font-size:0.9rem; line-height:1.6; margin-bottom:10px;">
-              • Tes messages sont traités pour générer des réponses, mais Meenly ne te juge pas,
-              ne partage pas ce que tu écris avec des proches et ne donne aucun avis médical ou juridique.<br /><br />
-              • En cas de danger immédiat pour toi ou pour quelqu’un d’autre, contacte les services d’urgence
-              de ton pays ou une ligne d’écoute spécialisée. Meenly ne peut pas gérer les urgences.<br /><br />
-              • Tu peux t’exprimer librement, même avec un langage vulgaire ou très direct : Meenly reste
-              calme et bienveillant. Par contre, si tu demandes des choses sans rapport avec tes émotions
-              (par exemple de la programmation, des recettes, de la politique…), il te rappellera qu’il
-              est là uniquement pour ton bien-être émotionnel.
-            </p>
-          </div>
+        <h2 class="section-title">Tarifs</h2>
+        <p class="section-subtitle">Choisis l'offre qui te convient</p>
+
+        <div class="pricing-container">
+
+            <div class="pricing-card">
+                <h3>Gratuit</h3>
+                <p class="price">0 DH</p>
+                <ul>
+                    <li>Accès limité</li>
+                    <li>Messages quotidiens restreints</li>
+                    <li>Accès aux moods</li>
+                </ul>
+            </div>
+
+            <div class="pricing-card highlight">
+                <h3>Mensuel</h3>
+                <p class="price">20 DH / mois</p>
+                <ul>
+                    <li>Messages illimités</li>
+                    <li>Réponses plus rapides</li>
+                    <li>Accès complet à toutes les fonctionnalités</li>
+                    <li>Support prioritaire</li>
+                </ul>
+            </div>
+
+            <div class="pricing-card">
+                <h3>Annuel</h3>
+                <p class="price">200 DH / an</p>
+                <ul>
+                    <li>Messages illimités</li>
+                    <li>Économie de 40%</li>
+                    <li>Accès complet Premium</li>
+                    <li>Support prioritaire</li>
+                </ul>
+            </div>
+
         </div>
-      </section>
+
+    </div>
+</section>
+
 
       <!-- PAGE ABOUT -->
       <section id="page-about" class="page">
