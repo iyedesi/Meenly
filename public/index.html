@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meenly – Ton espace émotionnel</title>
+
+  <style>
+    :root {
+      --bg-meenly: radial-gradient(circle at top, #7f5bff 0, #070b25 40%, #02030c 100%);
+      --bg-dark: #111217;
+      --bg-light: #f5f5fa;
+
+      --text-main-light: #f7f7ff;
+      --text-main-dark: #050517;
+
+      --accent: #a85bff;
+      --accent-soft: rgba(168, 91, 255, 0.08);
+      --accent-strong: #e557ff;
+      --danger: #ff4e6a;
+
+      --border-soft-dark: rgba(255, 255, 255, 0.06);
+      --border-soft-light: rgba(13, 14, 30, 0.08);
+
+      --msg-user-bg-dark: rgba(168, 91, 255, 0.15);
+      --msg-ai-bg-dark: rgba(4, 7, 30, 0.9);
+
+      --msg-user-bg-light: #ece8ff;
+      --msg-ai-bg-light: #ffffff;
+
+      --input-bg-dark: rgba(4, 7, 20, 0.9);
+      --input-bg-light: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      min-height: 100vh;
+      display: flex;
+      background: var(--bg-meenly);
+      color: var(--text-main-light);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body.theme-meenly {
+      background: var(--bg-meenly);
+      color: var(--text-main-light);
+    }
+
+    body.theme-light {
+      background: var(--bg-light);
+      color: var(--text-main-dark);
+    }
+
+    body.theme-dark {
+      background: #05060b;
+      color: var(--text-main-light);
+    }
+
+    /* -------- Splash intro -------- */
+
+    .splash {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, #a85bff 0, #050316 55%, #020108 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .splash.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .splash-inner {
+      text-align: center;
+      color: #f9f7ff;
+      animation: splash-pop 0.6s ease-out forwards;
+    }
+
+    .splash-logo {
+      font-size: 2.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+      background: linear-gradient(120deg, #ff9de1, #a85bff, #4bc0ff);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .splash-tagline {
+      font-size: 0.95rem;
+      opacity: 0.88;
+    }
+
+    @keyframes splash-pop {
+      from {
+        transform: translateY(10px) scale(0.96);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* -------- Layout général -------- */
+
+    .app-shell {
+      display: flex;
+      width: 100%;
+      max-height: 100vh;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 260px;
+      padding: 16px 14px;
+      border-right: 1px solid rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(24px);
+      background: linear-gradient(160deg, rgba(9, 9, 28, 0.92), rgba(9, 9, 28, 0.7));
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    body.theme-light .sidebar {
+      background: #ffffff;
+      border-right: 1px solid var(--border-soft-light);
+    }
+
+    body.theme-dark .sidebar {
+      background: #070814;
+      border-right: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .logo-block {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      cursor: pointer;
+    }
+
+    .logo-text {
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      background: linear-gradient(120deg, #ff9de1, #a85bff, #4bc0ff);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .logo-caption {
+      font-size: 0.7rem;
+      opacity: 0.6;
+    }
+
+    .theme-switcher {
+      position: relative;
+    }
+
+    .theme-toggle {
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(10, 11, 30, 0.9);
+      padding: 4px 10px;
+      font-size: 0.72rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      color: #f3f0ff;
+    }
+
+    .theme-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(120deg, #ff9de1, #a85bff, #4bc0ff);
+    }
+
+    body.theme-light .theme-toggle {
+      background: #f3f0ff;
+      color: #111018;
+      border-color: var(--border-soft-light);
+    }
+
+    body.theme-dark .theme-toggle {
+      background: #111217;
+      color: #f7f7ff;
+    }
+
+    .theme-menu {
+      position: absolute;
+      top: 0;
+      left: 120%;
+      transform-origin: top left;
+      transform: scale(0.95);
+      opacity: 0;
+      pointer-events: none;
+      background: rgba(5, 6, 18, 0.98);
+      border-radius: 14px;
+      padding: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      min-width: 130px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+      z-index: 9999;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+
+    .theme-menu.open {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+
+    body.theme-light .theme-menu {
+      background: #ffffff;
+      border-color: var(--border-soft-light);
+    }
+
+    body.theme-dark .theme-menu {
+      background: #05060e;
+    }
+
+    .theme-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 8px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    .theme-option:hover {
+      background: rgba(168, 91, 255, 0.12);
+    }
+
+    body.theme-light .theme-option:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .theme-option-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+
+    .theme-option-dot.light {
+      background: #f5f5fa;
+      border: 1px solid #dcdce8;
+    }
+
+    .theme-option-dot.meenly {
+      background: linear-gradient(130deg, #7f5bff, #ff9de1);
+    }
+
+    .theme-option-dot.dark {
+      background: #05060d;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+      margin-top: 8px;
+    }
+
+    .nav-primary {
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #a85bff, #e557ff);
+      color: white;
+      padding: 9px 14px;
+      font-size: 0.82rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .nav-primary span {
+      font-size: 0.9rem;
+    }
+
+    .nav-section-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      opacity: 0.55;
+      margin-top: 4px;
+    }
+
+    .nav-item {
+      text-align: left;
+      border-radius: 999px;
+      border: none;
+      padding: 7px 12px;
+      font-size: 0.8rem;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      opacity: 0.8;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      opacity: 1;
+    }
+
+    .nav-item.active {
+      background: rgba(168, 91, 255, 0.2);
+      opacity: 1;
+    }
+
+    body.theme-light .nav-item:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    body.theme-light .nav-item.active {
+      background: #ece8ff;
+    }
+
+    .sidebar-footer {
+      font-size: 0.7rem;
+      opacity: 0.6;
+    }
+
+    .sidebar-footer a {
+      color: inherit;
+      text-decoration: underline;
+      opacity: 0.9;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 18px 22px 18px 18px;
+      max-height: 100vh;
+    }
+
+    .page {
+      display: none;
+      height: 100%;
+    }
+
+    .page.active {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .page-inner {
+      max-width: 880px;
+      margin: 0 auto;
+      padding-bottom: 16px;
+    }
+
+    .page h1 {
+      font-size: 1.5rem;
+      margin-bottom: 6px;
+    }
+
+    .page-subtitle {
+      font-size: 0.92rem;
+      opacity: 0.7;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      border-radius: 18px;
+      padding: 16px 18px;
+      border: 1px solid var(--border-soft-dark);
+      background: radial-gradient(circle at top left, rgba(168, 91, 255, 0.16), rgba(8, 9, 24, 0.96));
+    }
+
+    body.theme-light .card {
+      background: #ffffff;
+      border-color: var(--border-soft-light);
+    }
+
+    body.theme-dark .card {
+      background: #05060f;
+      border-color: rgba(255, 255, 255, 0.09);
+    }
+
+    .field-label {
+      font-size: 0.82rem;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .text-input {
+      width: 100%;
+      border-radius: 999px;
+      padding: 9px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(10, 11, 28, 0.88);
+      color: inherit;
+      font-size: 0.86rem;
+      outline: none;
+    }
+
+    .text-input::placeholder {
+      opacity: 0.5;
+    }
+
+    body.theme-light .text-input {
+      background: #f9f8ff;
+      border-color: var(--border-soft-light);
+      color: var(--text-main-dark);
+    }
+
+    body.theme-dark .text-input {
+      background: #05060e;
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .primary-btn {
+      margin-top: 8px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #a85bff, #e557ff);
+      color: white;
+      font-size: 0.85rem;
+    }
+
+    .helper-text {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    .hint {
+      margin-top: 12px;
+      font-size: 0.8rem;
+      opacity: 0.7;
+      text-align: center;
+    }
+
+    /* -------- Chat -------- */
+
+    .chat-shell {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      max-width: 880px;
+      margin: 0 auto;
+      gap: 10px;
+    }
+
+    .chat-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 4px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .chat-messages {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .msg-row {
+      display: flex;
+      width: 100%;
+    }
+
+    .msg-row.user {
+      justify-content: flex-end;
+    }
+
+    .msg-row.ai {
+      justify-content: flex-start;
+    }
+
+    .msg-bubble {
+      max-width: 78%;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      padding: 8px 12px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .msg-row.ai .msg-bubble {
+      background: var(--msg-ai-bg-dark);
+      color: #f6f4ff;
+    }
+
+    .msg-row.user .msg-bubble {
+      background: var(--msg-user-bg-dark);
+      color: #ffffff;
+    }
+
+    body.theme-light .msg-row.ai .msg-bubble {
+      background: var(--msg-ai-bg-light);
+      color: #151324;
+      border-color: rgba(0, 0, 0, 0.04);
+    }
+
+    body.theme-light .msg-row.user .msg-bubble {
+      background: var(--msg-user-bg-light);
+      color: #151324;
+      border-color: rgba(93, 68, 196, 0.4);
+    }
+
+    body.theme-dark .msg-row.ai .msg-bubble {
+      background: #070814;
+    }
+
+    body.theme-dark .msg-row.user .msg-bubble {
+      background: rgba(168, 91, 255, 0.22);
+    }
+
+    .msg-role-label {
+      font-size: 0.72rem;
+      opacity: 0.6;
+      margin-bottom: 2px;
+    }
+
+    .mood-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .mood-btn {
+      border-radius: 999px;
+      border: none;
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .mood-emoji {
+      font-size: 1rem;
+    }
+
+    .mood-label {
+      opacity: 0.9;
+    }
+
+    body.theme-light .mood-btn {
+      background: #f0edff;
+    }
+
+    body.theme-dark .mood-btn {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .chat-input-row {
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    body.theme-light .chat-input-row {
+      border-top-color: rgba(0, 0, 0, 0.06);
+    }
+
+    .input-shell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--input-bg-dark);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    body.theme-light .input-shell {
+      background: var(--input-bg-light);
+      border-color: var(--border-soft-light);
+    }
+
+    body.theme-dark .input-shell {
+      background: #05060d;
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .input-shell input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: inherit;
+      outline: none;
+      font-size: 0.9rem;
+    }
+
+    .input-shell input::placeholder {
+      opacity: 0.55;
+    }
+
+    .send-btn {
+      border-radius: 999px;
+      width: 32px;
+      height: 32px;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background: linear-gradient(135deg, #a85bff, #e557ff);
+      color: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .send-btn-icon {
+      transform: translateY(-1px);
+    }
+
+    .send-btn:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    body.theme-light .send-btn {
+      background: #151324;
+      color: #ffffff;
+    }
+
+    body.theme-dark .send-btn {
+      background: #f5f5ff;
+      color: #050517;
+    }
+
+    .status-line {
+      font-size: 0.75rem;
+      opacity: 0.7;
+      height: 16px;
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-right: 4px;
+      animation: pulse 1s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from {
+        transform: scale(0.9);
+        opacity: 0.5;
+      }
+      to {
+        transform: scale(1.05);
+        opacity: 1;
+      }
+    }
+
+    .typing {
+      display: inline-block;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.7);
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.6),
+        6px 0 0 0 rgba(255, 255, 255, 0.5),
+        12px 0 0 0 rgba(255, 255, 255, 0.4);
+      animation: typingDots 1.1s infinite linear;
+    }
+
+    @keyframes typingDots {
+      0% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7),
+          6px 0 0 0 rgba(255, 255, 255, 0.4),
+          12px 0 0 0 rgba(255, 255, 255, 0.2);
+      }
+      50% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.2),
+          6px 0 0 0 rgba(255, 255, 255, 0.7),
+          12px 0 0 0 rgba(255, 255, 255, 0.4);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4),
+          6px 0 0 0 rgba(255, 255, 255, 0.2),
+          12px 0 0 0 rgba(255, 255, 255, 0.7);
+      }
+    }
+
+    /* -------- Pages spéciales -------- */
+
+    #page-account .page-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 80px;
+    }
+
+    #page-account .card {
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+    }
+
+    #page-account .text-input {
+      max-width: 260px;
+      margin: 0 auto;
+    }
+
+    #page-pricing .page-inner {
+      margin-top: 60px;
+    }
+
+    #page-safety .page-inner,
+    #page-about .page-inner {
+      margin-top: 40px;
+    }
+
+    @media (max-width: 900px) {
+      .sidebar {
+        display: none;
+      }
+      .main {
+        padding: 12px;
+      }
+      .chat-shell {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body class="theme-meenly">
+  <!-- Splash intro -->
+  <div id="splash" class="splash active">
+    <div class="splash-inner">
+      <div class="splash-logo">MEENLY</div>
+      <div class="splash-tagline">Ton espace émotionnel, sans jugement.</div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div id="logoReset" class="logo-block">
+          <div class="logo-text">MEENLY</div>
+          <div class="logo-caption">Ton espace émotionnel</div>
+        </div>
+
+        <div class="theme-switcher">
+          <button id="themeToggle" class="theme-toggle">
+            <span class="theme-dot"></span>
+            <span>Mode</span>
+          </button>
+          <div id="themeMenu" class="theme-menu">
+            <div class="theme-option" data-theme="light">
+              <div class="theme-option-dot light"></div>
+              <span>Clair</span>
+            </div>
+            <div class="theme-option" data-theme="meenly">
+              <div class="theme-option-dot meenly"></div>
+              <span>Meenly</span>
+            </div>
+            <div class="theme-option" data-theme="dark">
+              <div class="theme-option-dot dark"></div>
+              <span>Sombre</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button id="newChatBtn" class="nav-primary" data-page="chat">
+          <span>＋ Nouveau chat</span>
+        </button>
+
+        <div class="nav-section-title">Navigation</div>
+        <button class="nav-item active" data-page="chat">Chat</button>
+        <button class="nav-item" data-page="account">Mon espace</button>
+        <button class="nav-item" data-page="pricing">Tarifs</button>
+        <button class="nav-item" data-page="safety">Sécurité</button>
+        <button class="nav-item" data-page="about">À propos</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        Meenly n’est pas un professionnel de santé.  
+        En cas d’urgence, contacte les services d’aide locaux.
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <main class="main">
+      <!-- PAGE CHAT -->
+      <section id="page-chat" class="page active">
+        <div class="chat-shell">
+          <div class="chat-body">
+            <div id="chatMessages" class="chat-messages"></div>
+          </div>
+
+          <div class="chat-input-row">
+            <div class="mood-row">
+              <button class="mood-btn" data-mood="Triste">
+                <span class="mood-emoji">😭</span>
+                <span class="mood-label">Triste</span>
+              </button>
+              <button class="mood-btn" data-mood="En colère">
+                <span class="mood-emoji">😡</span>
+                <span class="mood-label">Colère</span>
+              </button>
+              <button class="mood-btn" data-mood="Anxieux">
+                <span class="mood-emoji">😰</span>
+                <span class="mood-label">Anxieux</span>
+              </button>
+              <button class="mood-btn" data-mood="Inquiet">
+                <span class="mood-emoji">😟</span>
+                <span class="mood-label">Inquiet</span>
+              </button>
+              <button class="mood-btn" data-mood="Fatigué émotionnellement">
+                <span class="mood-emoji">😩</span>
+                <span class="mood-label">Fatigué émotionnellement</span>
+              </button>
+            </div>
+
+            <div class="input-shell">
+              <input
+                id="chatInput"
+                type="text"
+                placeholder="Écris ici ce que tu as sur le cœur..."
+                autocomplete="off"
+              />
+              <button id="sendBtn" class="send-btn">
+                <span class="send-btn-icon">↑</span>
+              </button>
+            </div>
+
+            <div id="chatStatus" class="status-line"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PAGE ACCOUNT -->
+      <section id="page-account" class="page">
+        <div class="page-inner">
+          <h1 style="text-align:center;">Ton espace personnel</h1>
+          <p class="page-subtitle" style="text-align:center;">
+            Personnalise Meenly pour qu’il te parle comme tu aimes.
+          </p>
+
+          <div class="card account-card">
+            <label class="field-label" for="userNameInput">
+              Comment veux-tu que Meenly t’appelle ?
+            </label>
+            <input
+              id="userNameInput"
+              type="text"
+              class="text-input"
+              placeholder="Ton prénom ou un pseudo"
+            />
+            <button id="saveUserNameBtn" class="primary-btn">
+              Enregistrer
+            </button>
+            <p id="accountMessage" class="helper-text"></p>
+          </div>
+
+          <p class="hint">
+            Ce nom reste uniquement sur cet appareil. Tu peux le changer quand tu veux.
+          </p>
+        </div>
+      </section>
+
+      <!-- PAGE PRICING -->
+      <section id="page-pricing" class="page">
+        <div class="page-inner">
+          <h1 style="text-align:center;">Tarifs</h1>
+          <p class="page-subtitle" style="text-align:center;">
+            Commence gratuitement, puis choisis le rythme qui te convient si Meenly t’aide vraiment.
+          </p>
+
+          <div class="card" style="display:flex; gap:14px; flex-wrap:wrap;">
+            <div style="flex:1; min-width:180px;">
+              <h3>Gratuit</h3>
+              <p style="font-size:0.85rem; opacity:0.8; margin:6px 0 10px;">
+                Pour découvrir Meenly en douceur.
+              </p>
+              <ul style="font-size:0.8rem; opacity:0.9; list-style:none; padding-left:0;">
+                <li>• Accès au chat émotionnel</li>
+                <li>• Petites séances courtes</li>
+                <li>• Sans carte bancaire au début</li>
+              </ul>
+            </div>
+
+            <div style="flex:1; min-width:180px;">
+              <h3>Abonnement mensuel</h3>
+              <p style="font-size:0.85rem; opacity:0.8; margin:6px 0 10px;">
+                Pour t’accompagner régulièrement.
+              </p>
+              <ul style="font-size:0.8rem; opacity:0.9; list-style:none; padding-left:0;">
+                <li>• Utilisation flexible chaque jour</li>
+                <li>• Outil d’humeur et suivi</li>
+                <li>• Priorité sur les nouveautés</li>
+              </ul>
+            </div>
+
+            <div style="flex:1; min-width:180px;">
+              <h3>Abonnement annuel</h3>
+              <p style="font-size:0.85rem; opacity:0.8; margin:6px 0 10px;">
+                Pour ceux qui veulent un soutien sur la durée.
+              </p>
+              <ul style="font-size:0.8rem; opacity:0.9; list-style:none; padding-left:0;">
+                <li>• Meilleur rapport temps / prix</li>
+                <li>• Accès illimité dans l’année</li>
+                <li>• Idéal si Meenly t’aide vraiment</li>
+              </ul>
+            </div>
+          </div>
+
+          <p class="hint">
+            Les prix exacts et moyens de paiement pourront évoluer. L’idée : un accès abordable
+            qui respecte ta situation.
+          </p>
+        </div>
+      </section>
+
+      <!-- PAGE SAFETY -->
+      <section id="page-safety" class="page">
+        <div class="page-inner">
+          <h1>Sécurité & limites</h1>
+          <p class="page-subtitle">
+            Meenly est pensé pour être un espace intime, mais ce n’est pas un médecin ni un psychologue.
+          </p>
+
+          <div class="card">
+            <p style="font-size:0.9rem; line-height:1.6; margin-bottom:10px;">
+              • Tes messages sont traités pour générer des réponses, mais Meenly ne te juge pas,
+              ne partage pas ce que tu écris avec des proches et ne donne aucun avis médical ou juridique.<br /><br />
+              • En cas de danger immédiat pour toi ou pour quelqu’un d’autre, contacte les services d’urgence
+              de ton pays ou une ligne d’écoute spécialisée. Meenly ne peut pas gérer les urgences.<br /><br />
+              • Tu peux t’exprimer librement, même avec un langage vulgaire ou très direct : Meenly reste
+              calme et bienveillant. Par contre, si tu demandes des choses sans rapport avec tes émotions
+              (par exemple de la programmation, des recettes, de la politique…), il te rappellera qu’il
+              est là uniquement pour ton bien-être émotionnel.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- PAGE ABOUT -->
+      <section id="page-about" class="page">
+        <div class="page-inner">
+          <h1>À propos de Meenly</h1>
+          <p class="page-subtitle">
+            Un espace pour poser ce que tu ressens, même quand tu n’as personne à qui parler.
+          </p>
+
+          <div class="card">
+            <p style="font-size:0.9rem; line-height:1.6;">
+              Meenly est une IA conçue pour t’aider à mettre des mots sur ce que tu vis :
+              tristesse, colère, angoisse, fatigue émotionnelle, doutes, solitude…  
+              Elle t’écoute, reformule, pose des questions douces et t’accompagne pour voir
+              les choses un peu plus clairement.<br /><br />
+              Ce n’est pas une thérapie au sens médical, mais un espace pour :
+              <br />• vider ton cœur sans jugement<br />
+              • éclaircir des pensées qui tournent en boucle<br />
+              • t’entraîner à mieux comprendre tes émotions<br /><br />
+              Tu peux revenir quand tu veux, au rythme qui te convient.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // ------ Splash ------
+    const splash = document.getElementById("splash");
+    setTimeout(() => {
+      splash.classList.remove("active");
+    }, 2500); // 2,5 secondes
+
+    // ------ Thèmes ------
+    const themeToggle = document.getElementById("themeToggle");
+    const themeMenu = document.getElementById("themeMenu");
+    const themeOptions = themeMenu.querySelectorAll(".theme-option");
+
+    function applyTheme(theme) {
+      document.body.classList.remove("theme-light", "theme-meenly", "theme-dark");
+      if (theme === "light") document.body.classList.add("theme-light");
+      else if (theme === "dark") document.body.classList.add("theme-dark");
+      else document.body.classList.add("theme-meenly");
+      localStorage.setItem("meenly_theme", theme);
+    }
+
+    const storedTheme = localStorage.getItem("meenly_theme") || "meenly";
+    applyTheme(storedTheme);
+
+    themeToggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      themeMenu.classList.toggle("open");
+    });
+
+    themeOptions.forEach((opt) => {
+      opt.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const t = opt.getAttribute("data-theme");
+        applyTheme(t);
+        themeMenu.classList.remove("open");
+      });
+    });
+
+    document.addEventListener("click", () => {
+      themeMenu.classList.remove("open");
+    });
+
+    // ------ Navigation pages ------
+    const navItems = document.querySelectorAll(".nav-item");
+    const pages = {
+      chat: document.getElementById("page-chat"),
+      account: document.getElementById("page-account"),
+      pricing: document.getElementById("page-pricing"),
+      safety: document.getElementById("page-safety"),
+      about: document.getElementById("page-about"),
+    };
+
+    function showPage(pageName) {
+      Object.values(pages).forEach((p) => p.classList.remove("active"));
+      if (pages[pageName]) pages[pageName].classList.add("active");
+
+      navItems.forEach((item) => {
+        const target = item.getAttribute("data-page");
+        item.classList.toggle("active", target === pageName);
+      });
+    }
+
+    navItems.forEach((item) => {
+      item.addEventListener("click", () => {
+        const target = item.getAttribute("data-page");
+        showPage(target);
+      });
+    });
+
+    // ------ Profil utilisateur local ------
+    const userNameInput = document.getElementById("userNameInput");
+    const saveUserNameBtn = document.getElementById("saveUserNameBtn");
+    const accountMessage = document.getElementById("accountMessage");
+
+    function loadUserProfile() {
+      const storedName = localStorage.getItem("meenly_user_name");
+      if (storedName && userNameInput) {
+        userNameInput.value = storedName;
+      }
+    }
+
+    function saveUserProfile() {
+      const name = (userNameInput.value || "").trim();
+      if (!name) {
+        accountMessage.textContent =
+          "Entre au moins un petit prénom ou pseudo 😊";
+        return;
+      }
+      localStorage.setItem("meenly_user_name", name);
+      accountMessage.textContent = "C’est noté, je t’appellerai " + name + " 💜";
+    }
+
+    if (saveUserNameBtn) {
+      saveUserNameBtn.addEventListener("click", saveUserProfile);
+    }
+    loadUserProfile();
+
+    // ------ Chat + IA ------
+    const chatMessagesEl = document.getElementById("chatMessages");
+    const chatInput = document.getElementById("chatInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const chatStatus = document.getElementById("chatStatus");
+    const moodButtons = document.querySelectorAll(".mood-btn");
+    const newChatBtn = document.getElementById("newChatBtn");
+    const logoReset = document.getElementById("logoReset");
+
+    let isSending = false;
+    let conversationStartTime = null;
+    let subscriptionMessageSent = false;
+
+    const messagesContext = [
+      {
+        role: "system",
+        content:
+          "Tu es Meenly, une IA empathique spécialisée UNIQUEMENT dans le soutien émotionnel et psychologique.\n" +
+          "Ton rôle : écouter, comprendre et aider la personne à exprimer ce qu’elle ressent.\n\n" +
+          "- Tu NE réponds pas aux sujets hors émotion / psychologie / relations / bien-être (maths, foot, histoire, technologie, politique, code, etc.).\n" +
+          "- Si l’utilisateur pose une question hors sujet, tu le rappelles avec douceur que tu es là pour ses émotions, ce qu’il vit, ce qu’il ressent.\n" +
+          "- Tu reformules régulièrement ce que la personne dit pour vérifier que tu as bien compris.\n" +
+          "- Tu poses 1 ou 2 questions ouvertes pour l’aider à avancer, sans jamais prescrire de médicament ou faire de diagnostic.\n" +
+          "- Tu acceptes le langage vulgaire ou cru (colère, insultes, etc.) sans le juger.\n" +
+          "- Style : franc, doux, simple, chaleureux, humain.",
+      },
+    ];
+
+    let conversation = [...messagesContext];
+
+    function appendMessage(role, text) {
+      const row = document.createElement("div");
+      row.className = "msg-row " + (role === "user" ? "user" : "ai");
+
+      const bubble = document.createElement("div");
+      bubble.className = "msg-bubble";
+
+      const label = document.createElement("div");
+      label.className = "msg-role-label";
+      label.textContent = role === "user" ? "Toi" : "Meenly";
+
+      const body = document.createElement("div");
+      body.textContent = text;
+
+      bubble.appendChild(label);
+      bubble.appendChild(body);
+
+      row.appendChild(bubble);
+      chatMessagesEl.appendChild(row);
+      chatBodyScrollToEnd();
+    }
+
+    function appendTypingBubble() {
+      const row = document.createElement("div");
+      row.className = "msg-row ai";
+      row.id = "typing-row";
+
+      const bubble = document.createElement("div");
+      bubble.className = "msg-bubble";
+
+      const label = document.createElement("div");
+      label.className = "msg-role-label";
+      label.textContent = "Meenly";
+
+      const dots = document.createElement("span");
+      dots.className = "typing";
+
+      bubble.appendChild(label);
+      bubble.appendChild(dots);
+
+      row.appendChild(bubble);
+      chatMessagesEl.appendChild(row);
+      chatBodyScrollToEnd();
+    }
+
+    function removeTypingBubble() {
+      const row = document.getElementById("typing-row");
+      if (row) row.remove();
+    }
+
+    function chatBodyScrollToEnd() {
+      chatMessagesEl.parentElement.scrollTop =
+        chatMessagesEl.parentElement.scrollHeight;
+    }
+
+    async function sendToGuardrail(text) {
+      try {
+        const res = await fetch("/api/guardrail", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text }),
+        });
+        const data = await res.json();
+        return data.result || "OK";
+      } catch {
+        return "OK";
+      }
+    }
+
+    async function sendToAI(messages, temperature = 0.75) {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages, temperature }),
+      });
+      const data = await res.json();
+      return data.choices[0].message.content;
+    }
+
+    function maybeSendSubscriptionMessage() {
+      if (!conversationStartTime || subscriptionMessageSent) return;
+      const now = Date.now();
+      const diffMs = now - conversationStartTime;
+      const THIRTY_MIN = 30 * 60 * 1000;
+      if (diffMs >= THIRTY_MIN) {
+        subscriptionMessageSent = true;
+        const variants = [
+          "Je vois que tu prends le temps de vraiment déposer ce que tu ressens ici. Si jamais tu as envie d’un espace un peu plus stable et régulier, tu pourras jeter un œil aux abonnements de Meenly dans la section Tarifs. L’idée : te laisser un vrai endroit à toi, à petit prix.",
+          "Merci de rester si longtemps à parler avec moi. Si tu sens que Meenly t’aide, tu pourras un jour passer sur un abonnement pour t’assurer d’avoir toujours cet espace à portée de main. C’est optionnel, mais ça existe si tu en as besoin.",
+        ];
+        const msg =
+          variants[Math.floor(Math.random() * variants.length)];
+        appendMessage("assistant", msg);
+      }
+    }
+
+    async function handleUserMessage(rawText) {
+      const text = (rawText || "").trim();
+      if (!text || isSending) return;
+
+      if (!conversationStartTime) {
+        conversationStartTime = Date.now();
+      }
+
+      appendMessage("user", text);
+      chatInput.value = "";
+      isSending = true;
+      sendBtn.disabled = true;
+      appendTypingBubble();
+      chatStatus.innerHTML =
+        '<span class="status-dot"></span>Meenly réfléchit à sa réponse…';
+
+      const guardResult = await sendToGuardrail(text);
+
+      if (guardResult && guardResult.includes("HORS SUJET")) {
+        removeTypingBubble();
+        const variants = [
+          "Je comprends ta question, mais je suis là uniquement pour t’aider sur ce que tu ressens, tes émotions, tes relations et ton bien-être. Si tu veux, raconte-moi plutôt ce qui te pèse en ce moment.",
+          "Je te réponds honnêtement : je ne suis pas conçu pour autre chose que le soutien émotionnel. Parle-moi de ce qui te pèse, de ce qui te fait mal ou te prend la tête, je suis là pour ça.",
+          "Je préfère rester concentré sur toi, sur ce que tu vis intérieurement. Si tu veux, raconte-moi ce qui te travaille en ce moment, on partira de là.",
+        ];
+        const reply =
+          variants[Math.floor(Math.random() * variants.length)];
+        appendMessage("assistant", reply);
+        isSending = false;
+        sendBtn.disabled = false;
+        chatStatus.textContent = "";
+        return;
+      }
+
+      try {
+        const userMsg = { role: "user", content: text };
+        conversation.push(userMsg);
+
+        const aiText = await sendToAI(conversation, 0.8);
+        conversation.push({ role: "assistant", content: aiText });
+
+        removeTypingBubble();
+        appendMessage("assistant", aiText);
+        chatStatus.textContent = "";
+        maybeSendSubscriptionMessage();
+      } catch (err) {
+        console.error(err);
+        removeTypingBubble();
+        appendMessage(
+          "assistant",
+          "Je suis désolé, quelque chose a bugué de mon côté. Tu peux réessayer dans un petit instant."
+        );
+        chatStatus.textContent = "";
+      } finally {
+        isSending = false;
+        sendBtn.disabled = false;
+      }
+    }
+
+    sendBtn.addEventListener("click", () => {
+      handleUserMessage(chatInput.value);
+    });
+
+    chatInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        handleUserMessage(chatInput.value);
+      }
+    });
+
+    moodButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const mood = btn.getAttribute("data-mood");
+        const pseudoText =
+          "Mon humeur actuelle : " + mood + ".";
+        handleUserMessage(pseudoText);
+      });
+    });
+
+    function resetConversation() {
+      conversation = [...messagesContext];
+      conversationStartTime = null;
+      subscriptionMessageSent = false;
+      chatMessagesEl.innerHTML = "";
+      generateWelcomeMessage();
+    }
+
+    if (newChatBtn) {
+      newChatBtn.addEventListener("click", () => {
+        showPage("chat");
+        resetConversation();
+      });
+    }
+
+    if (logoReset) {
+      logoReset.addEventListener("click", () => {
+        location.reload();
+      });
+    }
+
+    async function generateWelcomeMessage() {
+      const storedName = localStorage.getItem("meenly_user_name");
+      const namePart = storedName
+        ? `La personne s’appelle ${storedName}. Tu peux utiliser son prénom une ou deux fois pour rendre le message plus chaleureux.\n`
+        : "";
+
+      try {
+        const welcomeInstruction = {
+          role: "user",
+          content:
+            namePart +
+            "Tu écris un premier message de bienvenue court et chaleureux (4 à 7 phrases maximum) en français.\n" +
+            "Style souhaité : très simple, humain, direct, sans phrases longues.\n" +
+            "Le cœur du message :\n" +
+            "- Tu peux raconter tout ce qui te dérange ou te pèse, il n’y aura aucun jugement.\n" +
+            "- Si tu veux, tu peux choisir un mood qui te décrit en ce moment.\n" +
+            "- Sinon, tu peux entrer directement dans le vif du sujet sans perdre de temps.\n" +
+            "Ne copie pas exactement ces phrases, reformule-les à ta façon.\n" +
+            "Fais en sorte que chaque message de bienvenue soit légèrement différent, mais garde toujours ce même esprit.",
+        };
+
+        const msgs = [...messagesContext, welcomeInstruction];
+        const aiText = await sendToAI(msgs, 0.8);
+        appendMessage("assistant", aiText);
+      } catch (err) {
+        console.error("Erreur message de bienvenue:", err);
+        appendMessage(
+          "assistant",
+          "Bienvenue sur Meenly 💜 Tu peux raconter tout ce qui te dérange ici, sans jugement. Si tu veux, choisis un mood qui te ressemble en ce moment, sinon écris directement ce que tu as sur le cœur."
+        );
+      }
+    }
+
+    // Lancer le premier message quand la page est prête
+    window.addEventListener("load", () => {
+      generateWelcomeMessage();
+    });
+  </script>
+</body>
+</html>
