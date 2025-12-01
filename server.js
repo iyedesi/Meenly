@@ -90,8 +90,8 @@ app.post("/api/guardrail", async (req, res) => {
   }
 });
 
-// ---------------- DÉMARRAGE ----------------
-const PORT = 3000;
+// ------------------ DÉMARRAGE ------------------
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log("✅ Serveur Meenly lancé : http://localhost:" + PORT);
+  console.log(`✅ Serveur Meenly lancé sur : http://localhost:${PORT}`);
 });
