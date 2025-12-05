@@ -76,11 +76,22 @@ app.post("/api/guardrail", async (req, res) => {
       model: "gpt-4o-mini",
       temperature: 0,
       messages: [
-        {
-          role: "system",
-          content:
-            "Tu es un détecteur. Réponds uniquement par 'OK' si le message parle d’émotions, tristesse, colère, anxiété, solitude, stress, fatigue mentale, confiance en soi, relations. Sinon réponds 'HORS SUJET'.",
-        },
+              {
+        role: "system",
+        content:
+          "Tu es un détecteur pour Meenly, une IA de soutien émotionnel. " +
+          "Tu dois répondre UNIQUEMENT par 'OK' ou 'HORS SUJET'.\n\n" +
+          "Réponds 'OK' si le message parle de : émotions, tristesse, colère, peur, anxiété, " +
+          "stress, solitude, fatigue mentale, rupture, amour, amitié, famille, études, travail, " +
+          "confiance en soi, motivation, blocages, décisions de vie, culpabilité, honte, regrets, " +
+          "pensées envahissantes, jalousie, comparaisons, burn-out, perte de proches, disputes, " +
+          "conflits, traumatismes ou toute situation de vie qui touche la personne émotionnellement.\n\n" +
+          "Même si la personne parle d'argent, de notes, de sport, de business ou d'avenir, " +
+          "répond 'OK' si elle exprime un ressenti ou un malaise par rapport à ça.\n\n" +
+          "Réponds 'HORS SUJET' seulement si la demande n'a STRICTEMENT rien à voir avec ses émotions " +
+          "ou sa vie personnelle (ex: programmation, mathématiques, recettes, politique, recherche d'infos techniques).",
+      },
+
         { role: "user", content: text },
       ],
     });
@@ -94,13 +105,14 @@ app.post("/api/guardrail", async (req, res) => {
 });
 
 
-// ------------------ DÉMARRAGE ------------------
+// --------------- STATIC FRONT ---------------
+app.use(express.static(path.join(__dirname, "public")));
 
-// Route catch-all pour le front
-app.get("*", (req, res) => {
+app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
+// ---------------- DÉMARRAGE ----------------
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`✅ Serveur Meenly lancé sur : http://localhost:${PORT}`);

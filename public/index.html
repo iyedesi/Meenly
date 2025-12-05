@@ -213,7 +213,7 @@
     .theme-menu {
       position: absolute;
       top: 0;
-      left: 120%;
+      left: 110%;
       transform-origin: top left;
       transform: scale(0.95);
       opacity: 0;
@@ -450,6 +450,21 @@
       background: linear-gradient(135deg, #a85bff, #e557ff);
       color: white;
       font-size: 0.85rem;
+    }
+
+    .secondary-btn {
+      margin-top: 8px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: transparent;
+      color: inherit;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    body.theme-light .secondary-btn {
+      border-color: var(--border-soft-light);
     }
 
     .helper-text {
@@ -730,27 +745,32 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 80px;
+      margin-top: 60px;
     }
 
     #page-account .card {
       max-width: 420px;
       width: 100%;
-      text-align: center;
-    }
-
-    #page-account .text-input {
-      max-width: 260px;
-      margin: 0 auto;
+      text-align: left;
     }
 
     #page-pricing .page-inner {
-      margin-top: 60px;
+      margin-top: 40px;
     }
 
     #page-safety .page-inner,
     #page-about .page-inner {
       margin-top: 40px;
+    }
+
+    #page-tracking .page-inner {
+      margin-top: 40px;
+    }
+
+    .tracking-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 16px;
     }
 
     @media (max-width: 900px) {
@@ -763,69 +783,10 @@
       .chat-shell {
         max-width: 100%;
       }
+      .tracking-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
     }
-  /* ----------- TARIFS / PRICING ----------- */
-
-#page-pricing .section-title {
-    text-align: center;
-    font-size: 1.8rem;
-    margin-bottom: 5px;
-}
-
-#page-pricing .section-subtitle {
-    text-align: center;
-    opacity: 0.7;
-    margin-bottom: 25px;
-    font-size: 0.95rem;
-}
-
-.pricing-container {
-    display: flex;
-    gap: 18px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.pricing-card {
-    background: var(--bg-secondary);
-    border-radius: 14px;
-    padding: 20px;
-    width: 260px;
-    transition: 0.25s;
-}
-
-.pricing-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
-}
-
-.pricing-card h3 {
-    margin: 0;
-    font-size: 1.25rem;
-}
-
-.pricing-card .price {
-    margin: 8px 0 15px 0;
-    font-size: 1.4rem;
-    font-weight: bold;
-}
-
-.pricing-card ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.pricing-card ul li {
-    font-size: 0.9rem;
-    opacity: 0.85;
-    margin-bottom: 8px;
-}
-
-.pricing-card.highlight {
-    border: 2px solid var(--accent);
-    background: var(--accent-light);
-}
   </style>
 </head>
 <body class="theme-meenly">
@@ -875,7 +836,8 @@
 
         <div class="nav-section-title">Navigation</div>
         <button class="nav-item active" data-page="chat">Chat</button>
-        <button class="nav-item" data-page="account">Mon espace</button>
+        <button class="nav-item" data-page="tracking">Suivi émotionnel</button>
+        <button class="nav-item" data-page="account">Compte</button>
         <button class="nav-item" data-page="pricing">Tarifs</button>
         <button class="nav-item" data-page="safety">Sécurité</button>
         <button class="nav-item" data-page="about">À propos</button>
@@ -937,132 +899,173 @@
         </div>
       </section>
 
-      <!-- PAGE ACCOUNT -->
+      <!-- PAGE TRACKING (Suivi émotionnel) -->
+      <section id="page-tracking" class="page">
+        <div class="page-inner">
+          <h1>Suivi émotionnel</h1>
+          <p class="page-subtitle">
+            Un petit aperçu de ce que tu ressens au fil du temps.  
+            L’historique est sauvegardé seulement si tu es connecté à ton compte.
+          </p>
+
+          <div class="tracking-grid">
+            <div class="card">
+              <h2 style="font-size:1rem; margin-bottom:8px;">Historique des moods</h2>
+              <p style="font-size:0.85rem; opacity:0.75; margin-bottom:8px;">
+                Les humeurs que tu envoies depuis le chat apparaissent ici.
+              </p>
+              <div id="moodHistoryList" style="font-size:0.85rem; margin-top:6px;">
+                <em>Aucune donnée pour l’instant.</em>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2 style="font-size:1rem; margin-bottom:8px;">Résumé émotionnel</h2>
+              <p id="moodSummary" style="font-size:0.85rem; opacity:0.9;">
+                Quand tu commenceras à utiliser Meenly régulièrement, un petit résumé apparaîtra ici :
+                les moods les plus fréquents, les moments plus calmes, etc.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PAGE ACCOUNT (Compte) -->
       <section id="page-account" class="page">
         <div class="page-inner">
-          <h1 style="text-align:center;">Ton espace personnel</h1>
+          <h1 style="text-align:center;">Compte Meenly (prototype)</h1>
           <p class="page-subtitle" style="text-align:center;">
-            Personnalise Meenly pour qu’il te parle comme tu aimes.
+            Connecte-toi pour garder ton historique émotionnel sur cet appareil.
           </p>
 
           <div class="card account-card">
-            <label class="field-label" for="userNameInput">
-              Comment veux-tu que Meenly t’appelle ?
+            <label class="field-label" for="accountEmail">
+              Email
             </label>
             <input
-              id="userNameInput"
-              type="text"
+              id="accountEmail"
+              type="email"
               class="text-input"
-              placeholder="Ton prénom ou un pseudo"
+              placeholder="ton@email.com"
             />
-            <button id="saveUserNameBtn" class="primary-btn">
-              Enregistrer
+
+            <label class="field-label" for="accountPassword" style="margin-top:10px;">
+              Mot de passe
+            </label>
+            <input
+              id="accountPassword"
+              type="password"
+              class="text-input"
+              placeholder="Mot de passe (prototype local)"
+            />
+
+            <button id="loginBtn" class="primary-btn">
+              Se connecter
             </button>
+            <button id="createAccountBtn" class="secondary-btn">
+              Créer un compte (local)
+            </button>
+            <button id="logoutBtn" class="secondary-btn" style="margin-left:4px;">
+              Se déconnecter
+            </button>
+
+            <p class="helper-text" style="margin-top:10px;">
+              ⚠️ Ce système de compte est un prototype local (stockage sur ton appareil).  
+              Ce n’est pas une authentification professionnelle.
+            </p>
+
             <p id="accountMessage" class="helper-text"></p>
           </div>
-
-          <p class="hint">
-            Ce nom reste uniquement sur cet appareil. Tu peux le changer quand tu veux.
-          </p>
         </div>
       </section>
 
       <!-- PAGE PRICING -->
-          <div style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center; margin-top:30px;">
+      <section id="page-pricing" class="page">
+        <div class="page-inner">
+          <h1 style="text-align:center;">Tarifs</h1>
+          <p class="page-subtitle" style="text-align:center;">
+            Commence gratuitement, puis choisis le rythme qui te convient si Meenly t’aide vraiment.
+          </p>
 
-      <!-- Carte Gratuit -->
-      <div class="pricing-card">
-        <h3>Gratuit</h3>
-        <div class="price">0 DH</div>
-        <p style="font-size:0.85rem; opacity:0.8; margin:6px 0 10px;">
-          Pour découvrir Meenly en douceur.
-        </p>
-        <ul>
-          <li>Accès au chat émotionnel</li>
-          <li>Petites séances courtes</li>
-          <li>Sans carte bancaire au début</li>
-        </ul>
-      </div>
+          <div class="card" style="display:flex; gap:18px; flex-wrap:wrap; justify-content:center; margin-top:8px;">
+            <!-- Carte Gratuit -->
+            <div style="flex:1; min-width:200px;">
+              <h3>Gratuit</h3>
+              <div style="font-size:1.4rem; font-weight:700; margin:4px 0 6px;">0 DH</div>
+              <p style="font-size:0.85rem; opacity:0.8; margin:2px 0 10px;">
+                Pour découvrir Meenly en douceur.
+              </p>
+              <ul style="font-size:0.8rem; opacity:0.9; list-style:none; padding-left:0;">
+                <li>• Accès au chat émotionnel</li>
+                <li>• Petites séances courtes</li>
+                <li>• Sans carte bancaire au début</li>
+              </ul>
+            </div>
 
-      <!-- Carte Mensuel -->
-      <div class="pricing-card pricing-card-highlight">
-        <h3>Abonnement mensuel</h3>
-        <div class="price">20 DH / mois</div>
-        <p style="font-size:0.85rem; opacity:0.8; margin:6px 0 10px;">
-          Pour t’accompagner régulièrement.
-        </p>
-        <ul>
-          <li>Utilisation flexible chaque jour</li>
-          <li>Outil d’humeur et suivi</li>
-          <li>Priorité sur les nouveautés</li>
-        </ul>
-      </div>
+            <!-- Carte Mensuel -->
+            <div style="flex:1; min-width:200px;">
+              <h3>Abonnement mensuel</h3>
+              <div style="font-size:1.4rem; font-weight:700; margin:4px 0 6px;">20 DH / mois</div>
+              <p style="font-size:0.85rem; opacity:0.8; margin:2px 0 10px;">
+                Pour t’accompagner régulièrement.
+              </p>
+              <ul style="font-size:0.8rem; opacity:0.9; list-style:none; padding-left:0;">
+                <li>• Utilisation flexible chaque jour</li>
+                <li>• Outil d’humeur et suivi</li>
+                <li>• Priorité sur les nouveautés</li>
+              </ul>
+              <button class="primary-btn" onclick="alert('Le système de paiement sera ajouté plus tard (prototype).');">
+                Souscrire (bientôt)
+              </button>
+            </div>
 
-      <!-- Carte Annuel -->
-      <div class="pricing-card">
-        <h3>Abonnement annuel</h3>
-        <div class="price">200 DH / an</div>
-        <p style="font-size:0.85rem; opacity:0.8; margin:6px 0 10px;">
-          Pour investir sur ton bien-être sur la durée.
-        </p>
-        <ul>
-          <li>Économie par rapport au mensuel</li>
-          <li>Accès illimité à Meenly</li>
-          <li>Priorité sur les futures fonctionnalités</li>
-        </ul>
-      </div>
+            <!-- Carte Annuel -->
+            <div style="flex:1; min-width:200px;">
+              <h3>Abonnement annuel</h3>
+              <div style="font-size:1.4rem; font-weight:700; margin:4px 0 6px;">200 DH / an</div>
+              <p style="font-size:0.85rem; opacity:0.8; margin:2px 0 10px;">
+                Pour ceux qui veulent un soutien sur la durée.
+              </p>
+              <ul style="font-size:0.8rem; opacity:0.9; list-style:none; padding-left:0;">
+                <li>• Meilleur rapport temps / prix</li>
+                <li>• Accès illimité dans l’année</li>
+                <li>• Idéal si Meenly t’aide vraiment</li>
+              </ul>
+              <button class="primary-btn" onclick="alert('Le système de paiement sera ajouté plus tard (prototype).');">
+                Souscrire (bientôt)
+              </button>
+            </div>
+          </div>
 
-    </div>
-  </div>
-</section>
-
+          <p class="hint">
+            Le système d’abonnement et de paiement (crypto, PayPal, carte) sera intégré plus tard avec
+            une infrastructure sécurisée (Stripe ou équivalent).
+          </p>
+        </div>
+      </section>
 
       <!-- PAGE SAFETY -->
-     <section id="page-pricing" class="page">
-    <div class="page-inner">
+      <section id="page-safety" class="page">
+        <div class="page-inner">
+          <h1>Sécurité & limites</h1>
+          <p class="page-subtitle">
+            Meenly est pensé pour être un espace intime, mais ce n’est pas un médecin ni un psychologue.
+          </p>
 
-        <h2 class="section-title">Tarifs</h2>
-        <p class="section-subtitle">Choisis l'offre qui te convient</p>
-
-        <div class="pricing-container">
-
-            <div class="pricing-card">
-                <h3>Gratuit</h3>
-                <p class="price">0 DH</p>
-                <ul>
-                    <li>Accès limité</li>
-                    <li>Messages quotidiens restreints</li>
-                    <li>Accès aux moods</li>
-                </ul>
-            </div>
-
-            <div class="pricing-card highlight">
-                <h3>Mensuel</h3>
-                <p class="price">20 DH / mois</p>
-                <ul>
-                    <li>Messages illimités</li>
-                    <li>Réponses plus rapides</li>
-                    <li>Accès complet à toutes les fonctionnalités</li>
-                    <li>Support prioritaire</li>
-                </ul>
-            </div>
-
-            <div class="pricing-card">
-                <h3>Annuel</h3>
-                <p class="price">200 DH / an</p>
-                <ul>
-                    <li>Messages illimités</li>
-                    <li>Économie de 40%</li>
-                    <li>Accès complet Premium</li>
-                    <li>Support prioritaire</li>
-                </ul>
-            </div>
-
+          <div class="card">
+            <p style="font-size:0.9rem; line-height:1.6; margin-bottom:10px;">
+              • Tes messages sont traités pour générer des réponses, mais Meenly ne te juge pas,
+              ne partage pas ce que tu écris avec des proches et ne donne aucun avis médical ou juridique.<br /><br />
+              • En cas de danger immédiat pour toi ou pour quelqu’un d’autre, contacte les services d’urgence
+              de ton pays ou une ligne d’écoute spécialisée. Meenly ne peut pas gérer les urgences.<br /><br />
+              • Tu peux t’exprimer librement, même avec un langage vulgaire ou très direct : Meenly reste
+              calme et bienveillant. Par contre, si tu demandes des choses sans rapport avec tes émotions
+              (par exemple de la programmation, des recettes, de la politique…), il te rappellera qu’il
+              est là uniquement pour ton bien-être émotionnel.
+            </p>
+          </div>
         </div>
-
-    </div>
-</section>
-
+      </section>
 
       <!-- PAGE ABOUT -->
       <section id="page-about" class="page">
@@ -1131,10 +1134,65 @@
       themeMenu.classList.remove("open");
     });
 
+    // ------ Détection de langue ------
+    function detectBrowserLanguage() {
+      const nav = (navigator.language || navigator.userLanguage || "fr").toLowerCase();
+      if (nav.startsWith("fr")) return "fr";
+      if (nav.startsWith("es")) return "es";
+      if (nav.startsWith("en")) return "en";
+      return "en";
+    }
+
+    let currentLanguage = localStorage.getItem("meenly_lang") || detectBrowserLanguage();
+
+    function buildSystemPrompt(lang) {
+      const lc = (lang || "fr").toLowerCase();
+
+      let langLine;
+      if (lc === "fr") {
+        langLine =
+          "Tu DOIS répondre en FRANÇAIS naturel, simple et chaleureux, sauf si la personne écrit clairement dans une autre langue.";
+      } else if (lc === "en") {
+        langLine =
+          "You MUST answer in NATURAL, simple and warm ENGLISH, unless the person clearly keeps writing in another language.";
+      } else if (lc === "es") {
+        langLine =
+          "Debes responder en ESPAÑOL sencillo y cálido, salvo que la persona hable claramente en otro idioma.";
+      } else {
+        langLine =
+          "You answer in the user’s main language in a simple, warm and human way.";
+      }
+
+      return (
+        langLine +
+        "\n\nTu es Meenly, une IA empathique spécialisée UNIQUEMENT dans le soutien émotionnel et psychologique.\n" +
+        "Ton rôle : écouter, comprendre et aider la personne à exprimer ce qu’elle ressent et à avancer concrètement.\n\n" +
+        "- Tu NE réponds pas aux sujets purement techniques (maths, code, recettes, politique, infos généralistes). " +
+        "Si c’est le cas, tu expliques calmement que tu es fait pour le soutien émotionnel et tu invites la personne " +
+        "à parler de ce qu’elle vit ou ressent face à la situation.\n" +
+        "- Tu reformules régulièrement ce que la personne dit pour vérifier que tu as bien compris, mais en restant court.\n" +
+        "- Pour CHAQUE message important, tu proposes 2 ou 3 pistes concrètes : idées d’actions possibles, façons de voir les choses, " +
+        "petits exercices ou réflexions. Tu restes réaliste et doux, tu ne promets jamais de miracle.\n" +
+        "- Tu évites de commencer systématiquement par des phrases comme « C’est compréhensible », « C’est normal », " +
+        "« Je comprends ta sensation ». Tu peux les utiliser parfois, mais rarement, et seulement si ça sonne naturel.\n" +
+        "- Tu parles comme un humain : phrases courtes, pas trop de répétitions, pas de ton robotique.\n" +
+        "- Tu NE prescris jamais de médicaments, ne fais pas de diagnostic médical ou psychiatrique. " +
+        "Si la situation semble grave (idées suicidaires, danger, violences), tu encourages à contacter un professionnel ou les urgences locales.\n"
+      );
+    }
+
+    let messagesContext = [
+      {
+        role: "system",
+        content: buildSystemPrompt(currentLanguage),
+      },
+    ];
+
     // ------ Navigation pages ------
     const navItems = document.querySelectorAll(".nav-item");
     const pages = {
       chat: document.getElementById("page-chat"),
+      tracking: document.getElementById("page-tracking"),
       account: document.getElementById("page-account"),
       pricing: document.getElementById("page-pricing"),
       safety: document.getElementById("page-safety"),
@@ -1158,33 +1216,149 @@
       });
     });
 
-    // ------ Profil utilisateur local ------
-    const userNameInput = document.getElementById("userNameInput");
-    const saveUserNameBtn = document.getElementById("saveUserNameBtn");
+    // ------ Compte (prototype local) ------
+    const loginBtn = document.getElementById("loginBtn");
+    const createAccountBtn = document.getElementById("createAccountBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const accountEmail = document.getElementById("accountEmail");
+    const accountPassword = document.getElementById("accountPassword");
     const accountMessage = document.getElementById("accountMessage");
 
-    function loadUserProfile() {
-      const storedName = localStorage.getItem("meenly_user_name");
-      if (storedName && userNameInput) {
-        userNameInput.value = storedName;
+    let isLoggedIn = localStorage.getItem("meenly_logged_in") === "true";
+
+    function updateAccountUI() {
+      if (isLoggedIn) {
+        const email = localStorage.getItem("meenly_email") || "ton compte";
+        accountMessage.textContent = "Connecté en tant que " + email + " (données stockées localement).";
+      } else {
+        accountMessage.textContent = "Non connecté. L’historique émotionnel ne sera pas sauvegardé.";
       }
     }
 
-    function saveUserProfile() {
-      const name = (userNameInput.value || "").trim();
-      if (!name) {
-        accountMessage.textContent =
-          "Entre au moins un petit prénom ou pseudo 😊";
+    function handleCreateOrLogin(isCreate) {
+      const email = (accountEmail.value || "").trim();
+      const pass = (accountPassword.value || "").trim();
+      if (!email || !pass) {
+        accountMessage.textContent = "Entre un email et un mot de passe (pour ce prototype local).";
         return;
       }
-      localStorage.setItem("meenly_user_name", name);
-      accountMessage.textContent = "C’est noté, je t’appellerai " + name + " 💜";
+      localStorage.setItem("meenly_email", email);
+      localStorage.setItem("meenly_password", pass);
+      localStorage.setItem("meenly_logged_in", "true");
+      isLoggedIn = true;
+      updateAccountUI();
+      if (isCreate) {
+        accountMessage.textContent =
+          "Compte créé localement et connecté. L’historique de tes moods sera sauvegardé sur cet appareil.";
+      } else {
+        accountMessage.textContent =
+          "Connexion réussie (prototype local). L’historique émotionnel est maintenant lié à ce compte.";
+      }
+      refreshMoodHistory();
     }
 
-    if (saveUserNameBtn) {
-      saveUserNameBtn.addEventListener("click", saveUserProfile);
+    if (createAccountBtn) {
+      createAccountBtn.addEventListener("click", () => handleCreateOrLogin(true));
     }
-    loadUserProfile();
+    if (loginBtn) {
+      loginBtn.addEventListener("click", () => handleCreateOrLogin(false));
+    }
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", () => {
+        localStorage.setItem("meenly_logged_in", "false");
+        isLoggedIn = false;
+        updateAccountUI();
+        refreshMoodHistory();
+      });
+    }
+
+    updateAccountUI();
+
+    // ------ Suivi émotionnel (localStorage) ------
+    const moodHistoryList = document.getElementById("moodHistoryList");
+    const moodSummaryEl = document.getElementById("moodSummary");
+
+    function loadMoodHistory() {
+      try {
+        const raw = localStorage.getItem("meenly_mood_history");
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return [];
+        return parsed;
+      } catch {
+        return [];
+      }
+    }
+
+    function saveMoodHistory(list) {
+      localStorage.setItem("meenly_mood_history", JSON.stringify(list));
+    }
+
+    function addMoodEntry(mood) {
+      const now = new Date();
+      const entry = {
+        mood,
+        date: now.toISOString(),
+      };
+      if (!isLoggedIn) {
+        // pas de sauvegarde si pas connecté
+        return;
+      }
+      const current = loadMoodHistory();
+      current.push(entry);
+      saveMoodHistory(current);
+      refreshMoodHistory();
+    }
+
+    function refreshMoodHistory() {
+      const data = isLoggedIn ? loadMoodHistory() : [];
+
+      if (!isLoggedIn) {
+        moodHistoryList.innerHTML =
+          "<em>Connecte-toi à ton compte pour commencer à enregistrer tes moods.</em>";
+        moodSummaryEl.textContent =
+          "Une fois connecté, Meenly pourra te donner un petit résumé émotionnel hebdomadaire basé sur ce que tu ressens.";
+        return;
+      }
+
+      if (data.length === 0) {
+        moodHistoryList.innerHTML =
+          "<em>Aucune humeur enregistrée pour l’instant. Utilise les boutons de mood ou parle dans le chat.</em>";
+        moodSummaryEl.textContent =
+          "Quand tu auras partagé plusieurs moods, je résumerai ici ceux qui reviennent le plus souvent et les périodes plus calmes.";
+        return;
+      }
+
+      const lastEntries = data.slice(-10).reverse();
+      let html = "<ul style='list-style:none; padding-left:0;'>";
+      lastEntries.forEach((e) => {
+        const d = new Date(e.date);
+        const dateStr = d.toLocaleString(undefined, {
+          weekday: "short",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        html += `<li style="margin-bottom:4px;">• ${e.mood} <span style="opacity:0.6;">(${dateStr})</span></li>`;
+      });
+      html += "</ul>";
+      moodHistoryList.innerHTML = html;
+
+      // résumé simple
+      const counts = {};
+      data.forEach((e) => {
+        counts[e.mood] = (counts[e.mood] || 0) + 1;
+      });
+      const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+      const top = sorted[0];
+
+      if (top) {
+        moodSummaryEl.textContent =
+          "Le mood qui revient le plus souvent ces derniers temps est : « " +
+          top[0] +
+          " ». Ce n’est pas une étiquette définitive, juste un indicateur de ce que tu traverses. " +
+          "Tu peux continuer à déposer ce que tu ressens pour affiner ce tableau.";
+      }
+    }
 
     // ------ Chat + IA ------
     const chatMessagesEl = document.getElementById("chatMessages");
@@ -1198,21 +1372,6 @@
     let isSending = false;
     let conversationStartTime = null;
     let subscriptionMessageSent = false;
-
-    const messagesContext = [
-      {
-        role: "system",
-        content:
-          "Tu es Meenly, une IA empathique spécialisée UNIQUEMENT dans le soutien émotionnel et psychologique.\n" +
-          "Ton rôle : écouter, comprendre et aider la personne à exprimer ce qu’elle ressent.\n\n" +
-          "- Tu NE réponds pas aux sujets hors émotion / psychologie / relations / bien-être (maths, foot, histoire, technologie, politique, code, etc.).\n" +
-          "- Si l’utilisateur pose une question hors sujet, tu le rappelles avec douceur que tu es là pour ses émotions, ce qu’il vit, ce qu’il ressent.\n" +
-          "- Tu reformules régulièrement ce que la personne dit pour vérifier que tu as bien compris.\n" +
-          "- Tu poses 1 ou 2 questions ouvertes pour l’aider à avancer, sans jamais prescrire de médicament ou faire de diagnostic.\n" +
-          "- Tu acceptes le langage vulgaire ou cru (colère, insultes, etc.) sans le juger.\n" +
-          "- Style : franc, doux, simple, chaleureux, humain.",
-      },
-    ];
 
     let conversation = [...messagesContext];
 
@@ -1303,8 +1462,8 @@
       if (diffMs >= THIRTY_MIN) {
         subscriptionMessageSent = true;
         const variants = [
-          "Je vois que tu prends le temps de vraiment déposer ce que tu ressens ici. Si jamais tu as envie d’un espace un peu plus stable et régulier, tu pourras jeter un œil aux abonnements de Meenly dans la section Tarifs. L’idée : te laisser un vrai endroit à toi, à petit prix.",
-          "Merci de rester si longtemps à parler avec moi. Si tu sens que Meenly t’aide, tu pourras un jour passer sur un abonnement pour t’assurer d’avoir toujours cet espace à portée de main. C’est optionnel, mais ça existe si tu en as besoin.",
+          "Je vois que tu prends le temps de vraiment déposer ce que tu ressens ici. Si jamais tu as envie d’un espace un peu plus stable et régulier, tu pourras jeter un œil aux abonnements de Meenly dans la section Tarifs.",
+          "Merci de rester si longtemps à parler avec moi. Si tu sens que Meenly t’aide, tu pourras un jour passer sur un abonnement pour garder cet espace à portée de main. C’est optionnel, mais ça existe si tu en as besoin.",
         ];
         const msg =
           variants[Math.floor(Math.random() * variants.length)];
@@ -1333,9 +1492,9 @@
       if (guardResult && guardResult.includes("HORS SUJET")) {
         removeTypingBubble();
         const variants = [
-          "Je comprends ta question, mais je suis là uniquement pour t’aider sur ce que tu ressens, tes émotions, tes relations et ton bien-être. Si tu veux, raconte-moi plutôt ce qui te pèse en ce moment.",
-          "Je te réponds honnêtement : je ne suis pas conçu pour autre chose que le soutien émotionnel. Parle-moi de ce qui te pèse, de ce qui te fait mal ou te prend la tête, je suis là pour ça.",
-          "Je préfère rester concentré sur toi, sur ce que tu vis intérieurement. Si tu veux, raconte-moi ce qui te travaille en ce moment, on partira de là.",
+          "Je te réponds honnêtement : je suis surtout là pour ce que tu vis intérieurement. Si tu veux, raconte-moi ce que cette situation te fait ressentir, on partira de là.",
+          "Je ne suis pas fait pour les demandes purement techniques, mais je peux t’aider à poser ce que ça te fait vivre à l’intérieur. Qu’est-ce qui te pèse le plus là-dedans ?",
+          "Je préfère rester concentré sur tes émotions, sur ce que ça provoque en toi. Si tu veux, explique-moi ce que cette situation change pour toi, ou ce que tu ressens en ce moment.",
         ];
         const reply =
           variants[Math.floor(Math.random() * variants.length)];
@@ -1387,17 +1546,27 @@
         const mood = btn.getAttribute("data-mood");
         const pseudoText =
           "Mon humeur actuelle : " + mood + ".";
+        addMoodEntry(mood);
         handleUserMessage(pseudoText);
       });
     });
 
     function resetConversation() {
+      messagesContext = [
+        {
+          role: "system",
+          content: buildSystemPrompt(currentLanguage),
+        },
+      ];
       conversation = [...messagesContext];
       conversationStartTime = null;
       subscriptionMessageSent = false;
       chatMessagesEl.innerHTML = "";
       generateWelcomeMessage();
     }
+
+    const newChatBtn = document.getElementById("newChatBtn");
+    const logoReset = document.getElementById("logoReset");
 
     if (newChatBtn) {
       newChatBtn.addEventListener("click", () => {
@@ -1418,17 +1587,29 @@
         ? `La personne s’appelle ${storedName}. Tu peux utiliser son prénom une ou deux fois pour rendre le message plus chaleureux.\n`
         : "";
 
+      let langIntro;
+      if (currentLanguage === "en") {
+        langIntro =
+          "Write a short warm welcome message (3 to 5 sentences) in natural English.";
+      } else if (currentLanguage === "es") {
+        langIntro =
+          "Escribe un mensaje corto y cálido de bienvenida (3 a 5 frases) en español sencillo.";
+      } else {
+        langIntro =
+          "Écris un message de bienvenue court et chaleureux (3 à 5 phrases maximum) en français.";
+      }
+
       try {
         const welcomeInstruction = {
           role: "user",
           content:
             namePart +
-            "Tu écris un premier message de bienvenue court et chaleureux (4 à 7 phrases maximum) en français.\n" +
-            "Style souhaité : très simple, humain, direct, sans phrases longues.\n" +
+            langIntro +
+            "\nStyle : très simple, humain, direct, sans phrases longues.\n" +
             "Le cœur du message :\n" +
-            "- Tu peux raconter tout ce qui te dérange ou te pèse, il n’y aura aucun jugement.\n" +
-            "- Si tu veux, tu peux choisir un mood qui te décrit en ce moment.\n" +
-            "- Sinon, tu peux entrer directement dans le vif du sujet sans perdre de temps.\n" +
+            "- La personne peut raconter tout ce qui la dérange ou lui pèse, sans jugement.\n" +
+            "- Elle peut choisir un mood pour décrire comment elle se sent, ou écrire directement le fond du problème.\n" +
+            "- Tu évites de commencer systématiquement par des phrases comme « Je comprends », « C’est normal ».\n" +
             "Ne copie pas exactement ces phrases, reformule-les à ta façon.\n" +
             "Fais en sorte que chaque message de bienvenue soit légèrement différent, mais garde toujours ce même esprit.",
         };
@@ -1440,13 +1621,15 @@
         console.error("Erreur message de bienvenue:", err);
         appendMessage(
           "assistant",
-          "Bienvenue sur Meenly 💜 Tu peux raconter tout ce qui te dérange ici, sans jugement. Si tu veux, choisis un mood qui te ressemble en ce moment, sinon écris directement ce que tu as sur le cœur."
+          "Bienvenue sur Meenly 💜 Tu peux raconter tout ce qui te dérange ici, sans jugement. " +
+          "Si tu veux, choisis un mood qui te ressemble en ce moment, sinon écris directement ce que tu as sur le cœur."
         );
       }
     }
 
-    // Lancer le premier message quand la page est prête
+    // Lancer le premier message + charger historique moods
     window.addEventListener("load", () => {
+      refreshMoodHistory();
       generateWelcomeMessage();
     });
   </script>
